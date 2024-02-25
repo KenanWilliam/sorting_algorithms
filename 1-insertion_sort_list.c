@@ -1,33 +1,66 @@
 #include "sort.h"
+
 /**
-* insertion_sort_list - insertion sorting algorithm
-* @list: linked list to sort
+ * swap_node - swaps 2 nodes
+ * @a: the first node
+ * @b: the second node
+ * Return: the smaller node address
 */
+listint_t *swap_node(listint_t *a, listint_t *b)
+{
+	/*listint_t *temp;*/
+
+	if (a == NULL || b == NULL)
+		return (b);
+	a->next = b->next;
+	if (a->next != NULL)
+	{
+		a->next->prev = a;
+	}
+	b->prev = a->prev;
+	if (b->prev != NULL)
+	{
+		b->prev->next = b;
+	}
+	b->next = a;
+	a->prev = b;
+	return (b);
+}
+/**
+ * insertion_sort_list - sorts a list using insertion sort algorithm
+ * @list: the list to sort
+ * Return: void
+*/
+
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *tmp;
-	int n;
+	listint_t *i, *j;
 
-	if (!list)
-		return;
-	tmp = *list;
-	while (tmp)
+	if ((list == NULL || (*list == NULL)))
 	{
-		while (tmp)
+		return;
+	}
+	for (i = *list; i != NULL;)
+	{
+		j = i->prev;
+		i = i->next;
+		while (j != NULL)
 		{
-			if (tmp->next)
+			if (j->next->n < j->n)
 			{
-				if (tmp->n > tmp->next->n)
+				j = swap_node(j, j->next);
+				if (j->prev == NULL)
 				{
-					n = tmp->n;
-					*(int *)&tmp->n = tmp->next->n;
-					*(int *)&tmp->next->n = n;
-					tmp = *list;
-					print_list(*list);
-					break;
+					*list = j;
 				}
+				j = j->prev;
+				print_list(*list);
 			}
-			tmp = tmp->next;
+			else
+			{
+				break;
+			}
 		}
 	}
+
 }
